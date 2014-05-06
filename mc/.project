@@ -3,12 +3,6 @@
 	<name>mc</name>
 	<comment></comment>
 	<projects>
-		<project>json-simple-1.1.1</project>
-		<project>commons-codec-1.8-javadoc</project>
-		<project>commons-codec-1.8</project>
-		<project>jstl-impl</project>
-		<project>standard-1.1.2</project>
-		<project>javax.servlet.jsp.jstl</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
