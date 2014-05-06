@@ -4,7 +4,7 @@ package model;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-
+//hello
 
 public class Model {
 	private CandidateDAO userDAO;
