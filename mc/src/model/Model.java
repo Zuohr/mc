@@ -1,4 +1,4 @@
-//lily
+
 package model;
 
 import javax.servlet.ServletConfig;
