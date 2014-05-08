@@ -72,15 +72,10 @@
 			icon : imageStops,
 			title : "Forbes Ave Opp Hamburg Bldg"
 		}), new google.maps.Marker({
-			position : new google.maps.LatLng(40.444647, -79.943554),
+			position : new google.maps.LatLng(40.4442007, -79.9445133),
 			map : map,
 			icon : imageStops,
 			title : "Forbes Ave at Morewood Ave FS (Carnegie Mellon)"
-		}), new google.maps.Marker({
-			position : new google.maps.LatLng(40.444540, -79.948715),
-			map : map,
-			icon : imageStops,
-			title : "Craig St at Forbes"
 		}) ];
 		var contentString = [
 				'<div id="content">'
@@ -319,6 +314,10 @@
 									<div class="12u">
 										<input type="button" value="Search" id="home" class="button"
 											onclick="changeDisplay()" />
+										<!-- <a href="#" class="button form-button-submit" onclick = "changeDisplay();">Search</a> -->
+										<!--<a
+											href="#" class="button button-alt form-button-reset">Clear
+											Form</a>-->
 									</div>
 								</div>
 								<span>
@@ -335,14 +334,14 @@
 
 	<div class="wrapper wrapper-style3" id="result">
 		<article id="contact" class="container small">
-			<header>
-				<div align="center" id="panel">
-					<b>Show route </b> <select id="route" onchange="calcRoute();">
-						<option value="61C-71A">61C - 71A</option>
-						<option value="71A">71A</option>
-					</select> <input type="button" value="Back" onclick="changeDisplay()" />
-				</div>
-			</header>
+			<div align="center" id="panel">
+				<b>Show route </b> <select id="route" onchange="calcRoute();">
+					<option value="61C-71A">61C - 71A</option>
+					<option value="71A">71A</option>
+				</select> <input type="button" value="Back" onclick="changeDisplay()" />
+			</div>
+			<div id="map-canvas1"></div>
+
 			<div>
 				<div class="row">
 					<div class="4u">
@@ -442,38 +441,47 @@
 
 		</article>
 	</div>
+
+
 	<!-- Work -->
 	<div class="wrapper wrapper-style2">
 		<article id="work">
 			<header>
-					<h2>What's Around.</h2>
-						<span>Find Amazing Food, Great Places & Events Near You .</span>
-					</header>
-					<div class="container">
-						<div class="row">
-							<div class="4u">
-								<section class="box box-style1">
-									<span><img src="images/dish2.jpg" alt=""></span>
-									<h3>Toast! Kitchen & Wine Bar</h3>
-									<p>This is the best fast food restaurant I know.  Five stars.  I have never had food this fast/cheap/tasty in any form that was repeatable.  If you're not eating the vegetarian options, the carnitas…</p>
-								</section>
-							</div>
-							<div class="4u">
-								<section class="box box-style1">
-									<span><img src="images/dish1.jpg" alt=""></span>
-									<h3>Girasole Restaurant</h3>
-									<p>Girasole is one of the overall best restaurants in Pittsburgh, but it's not perfect. My review is based on an aggregation of numerous different dining experiences at this restaurant, so I…</p>
-								</section>
-							</div>
-							<div class="4u">
-								<section class="box box-style1">
-									<span><img src="images/memorial.jpg" alt=""></span>
-									<h3> Soldiers & Sailors Memorial Hall & Museum</h3>
-									<p>Love this memorial hall that commemorates the soldiers who fought in the various wars for this country.…</p>
-								</section>
-							</div>
-						</div>
+				<h2>What's Around.</h2>
+				<span>Find Amazing Food, Great Places & Events Near You .</span>
+			</header>
+			<div class="container">
+				<div class="row">
+					<div class="4u">
+						<section class="box box-style1">
+							<span><img src="images/dish2.jpg" alt=""></span>
+							<h3>Toast! Kitchen & Wine Bar</h3>
+							<p>This is the best fast food restaurant I know. Five stars.
+								I have never had food this fast/cheap/tasty in any form that was
+								repeatable. If you're not eating the vegetarian options, the
+								carnitas…</p>
+						</section>
 					</div>
+					<div class="4u">
+						<section class="box box-style1">
+							<span><img src="images/dish1.jpg" alt=""></span>
+							<h3>Girasole Restaurant</h3>
+							<p>Girasole is one of the overall best restaurants in
+								Pittsburgh, but it's not perfect. My review is based on an
+								aggregation of numerous different dining experiences at this
+								restaurant, so I…</p>
+						</section>
+					</div>
+					<div class="4u">
+						<section class="box box-style1">
+							<span><img src="images/memorial.jpg" alt=""></span>
+							<h3>Soldiers & Sailors Memorial Hall & Museum</h3>
+							<p>Love this memorial hall that commemorates the soldiers who
+								fought in the various wars for this country.…</p>
+						</section>
+					</div>
+				</div>
+			</div>
 			<footer>
 				<p>Lorem ipsum dolor sit sapien vestibulum ipsum primis?</p>
 				<a href="#portfolio" class="button button-big">See some of my
