@@ -228,6 +228,7 @@
 			<li><a href="#contact">Find Bus</a></li>
 			<li><a href="#work">What's Around</a></li>
 			<li><a href="#portfolio">Subscribe</a></li>
+		    <li><a href="https://policy-portal.truste.com/core/privacy-policy/eBiz/c14b44c8-660c-457f-ac6d-eeee6ebed927#landingPage">Privacy Policy</a></li>
 		</ul>
 	</nav>
 
