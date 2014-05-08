@@ -73,10 +73,15 @@
 			icon : imageStops,
 			title : "Forbes Ave Opp Hamburg Bldg"
 		}), new google.maps.Marker({
-			position : new google.maps.LatLng(40.4442007, -79.9445133),
+			position : new google.maps.LatLng(40.444647, -79.943554),
 			map : map,
 			icon : imageStops,
 			title : "Forbes Ave at Morewood Ave FS (Carnegie Mellon)"
+		}), new google.maps.Marker({
+			position : new google.maps.LatLng(40.444540, -79.948715),
+			map : map,
+			icon : imageStops,
+			title : "Craig St at Forbes"
 		}) ];
 		var contentString = [
 				'<div id="content">'
@@ -228,7 +233,9 @@
 			<li><a href="#contact">Find Bus</a></li>
 			<li><a href="#work">What's Around</a></li>
 			<li><a href="#portfolio">Subscribe</a></li>
-		    <li><a href="https://policy-portal.truste.com/core/privacy-policy/eBiz/c14b44c8-660c-457f-ac6d-eeee6ebed927#landingPage">Privacy Policy</a></li>
+			<li><a
+				href="https://policy-portal.truste.com/core/privacy-policy/eBiz/c14b44c8-660c-457f-ac6d-eeee6ebed927#landingPage">Privacy
+					Policy</a></li>
 		</ul>
 	</nav>
 
