@@ -33,7 +33,54 @@
 	src="http://maps.google.com/maps/api/js?sensor=true">
 	
 </script>
+ <script>
+      var db = window.openDatabase("scores", "", "Previous Scores", 1024*1000);
+function insertalerts(route, time, alertby, phone) {
+       db.transaction(function(tx) {
+          tx.executeSql('INSERT INTO Alerts (route_id, time, alert_by, phone) VALUES (?, ?, ?, ?)', [route, time, alertby, phone]);
+       });
+      }
+	   
+      function renderResults(tx, rs) {
+        e = $('#previous_scores');
+        e.html("");
+        for(var i=0; i < rs.rows.length; i++) {
+          r = rs.rows.item(i);
+          e.html(e.html() + ' Route: ' + r['route_id'] + ', Time: ' + r['time'] + ', Alert_Before: ' + r['alert_by'] + ', phone_number: ' + r['phone'] + '<br />');
+        }
+      }
 
+      function renderScores(email) {
+        db.transaction(function(tx) {
+          if (!(email === undefined)) {
+            tx.executeSql('SELECT * FROM Alerts WHERE route_id = ?', [email], renderResults);
+          } else {
+            tx.executeSql('SELECT * FROM Alerts', [], renderResults);
+          }
+        });
+      }
+
+      $(document).ready(function() {
+        db.transaction(function(tx) {
+          tx.executeSql('CREATE TABLE IF NOT EXISTS Alerts(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT, alert_by TEXT, phone TEXT)', []);
+        });
+
+        $('#score_form').submit(function() {
+         	insertalerts( $('#hole1').val(),  $('#time').val(),  $('#hole2').val(),  $('#email').val());
+         
+          renderScores();
+          return false;
+        });
+
+        $('#filter_previous_scores_form').submit(function() {
+          e = $('#filter_by_email').val();
+          renderScores(e);
+          return false;
+        });
+
+        renderScores();
+      });
+    </script>
 <script>
 	var isHome = true;
 	var directionsDisplay;
@@ -43,6 +90,9 @@
 	var marker = null;
 
 	function initialize() {
+		    alert("I understand location data is being collected by this application and agree to PAAC Privacy Policy! ");
+		
+		
 		directionsDisplay = new google.maps.DirectionsRenderer();
 		var mapOptions = {
 			zoom : 15,
@@ -483,118 +533,86 @@
 				</div>
 			</div>
 			<footer>
-				<p>Lorem ipsum dolor sit sapien vestibulum ipsum primis?</p>
-				<a href="#portfolio" class="button button-big">See some of my
-					recent work</a>
+										<a href="#top" class="button button-big">Back to Top</a>
 			</footer>
 		</article>
 	</div>
 
 	<!-- Portfolio -->
-	<div class="wrapper wrapper-style3">
-		<article id="portfolio">
-			<header>
-				<h2>Subscribe to PAAC Buses!</h2>
-				<span>Never miss or wait for a bus with our up-to-date
-					alerts.</span>
-			</header>
-			<div class="container">
-				<div class="row">
-					<div class="12u"></div>
-				</div>
-				<div class="row">
-					<div class="4u">
-						<article class="box box-style2">
-							<a href="http://flypixel.com/generic-smartphone/8949517882265310"
-								class="image image-full"><img src="images/portfolio01.jpg"
-								alt="" /></a>
-							<h3>
-								<a
-									href="http://flypixel.com/generic-smartphone/8949517882265310">Magna
-									feugiat</a>
-							</h3>
-							<p>Ornare nulla proin odio consequat.</p>
-						</article>
+			<div class="wrapper wrapper-style3">
+				<article id="portfolio">
+					<header>
+						<h2>Subscribe to PAAC Buses!</h2>
+						<span>Never miss or wait for a bus with our up-to-date alerts.</span>
+					</header>
+					<div class="container">
+						<div class="row">
+							<div class="12u">
+							</div>
+						</div>
+						<div class="row">
+							<div class="4u">
+								<article class="box box-style2">
+									<a class="image image-full"><img src="images/portfolio01.jpg" alt="" /></a>
+									<h3><a href="http://flypixel.com/generic-smartphone/8949517882265310">Create Alert</a></h3>
+									
+					   <form method="get" id="score_form"><b>
+      <div>
+        <label for="1">Bus Route:</label>
+        <input type="text" placeholder="Bus Route Name" id="hole1" name="hole1"  />
+      </div>
+	  <div>
+	  <label for="2">Bus Time:</label><br>
+	   <input type="time" id="time" name="time" placeholder="Specify route Time?" />
+	  </div>
+      <div>
+        <label for="2">Alert Before:</label>
+        <input type="text" placeholder="Alert before no. of stops?" min="1"  id="hole2" name="hole2" size="2" step="1" />
+      </div>
+      <div>
+      <label for="2">Phone Number:</label>
+        <input type="text" id="email" placeholder="Phone number" size="10"/>
+      </div>
+      <div>
+        <input type="submit" class="button button-big" value="Create Alert" />
+      </div>
+      </b>
+    </form>
+    <div><br>
+<h3><a href="#">Filter Alerts</a></h3>
+      <form id="filter_previous_scores_form">
+        <input type="text" placeholder="Filter Alerts by routes" size="40" id="filter_by_email" /><br />
+        <input type="submit"  class="button button-big" value="Filter" />
+      </form>
+    </div><br>
+<h3><a href="http://flypixel.com/generic-smartphone/8949517882265310">Recent Alerts</a></h3>
+    <div id="previous_scores">
+
+    </div>
+							
+
+								</article>
+							</div>
+							
+						</div>
+						
 					</div>
-					<div class="4u">
-						<article class="box box-style2">
-							<a href="http://flypixel.com/n33" class="image image-full"><img
-								src="images/portfolio02.jpg" alt="" /></a>
-							<h3>
-								<a href="http://flypixel.com/n33">Veroeros primis</a>
-							</h3>
-							<p>Ornare nulla proin odio consequat.</p>
-						</article>
-					</div>
-					<div class="4u">
-						<article class="box box-style2">
-							<a href="http://flypixel.com/wood-ui-kit/3574765984616310"
-								class="image image-full"><img src="images/portfolio03.jpg"
-								alt="" /></a>
-							<h3>
-								<a href="http://flypixel.com/wood-ui-kit/3574765984616310">Lorem
-									ipsum</a>
-							</h3>
-							<p>Ornare nulla proin odio consequat.</p>
-						</article>
-					</div>
-				</div>
-				<div class="row">
-					<div class="4u">
-						<article class="box box-style2">
-							<a href="http://flypixel.com/n33-pattern-set-1/3522389001865317"
-								class="image image-full"><img src="images/portfolio04.jpg"
-								alt="" /></a>
-							<h3>
-								<a href="http://flypixel.com/n33-pattern-set-1/3522389001865317">Tempus
-									dolore</a>
-							</h3>
-							<p>Ornare nulla proin odio consequat.</p>
-						</article>
-					</div>
-					<div class="4u">
-						<article class="box box-style2">
-							<a href="http://flypixel.com/cityscape/9803996277226316"
-								class="image image-full"><img src="images/portfolio05.jpg"
-								alt="" /></a>
-							<h3>
-								<a href="http://flypixel.com/cityscape/9803996277226316">Feugiat
-									aliquam</a>
-							</h3>
-							<p>Ornare nulla proin odio consequat.</p>
-						</article>
-					</div>
-					<div class="4u">
-						<article class="box box-style2">
-							<a href="http://flypixel.com/n33" class="image image-full"><img
-								src="images/portfolio06.jpg" alt="" /></a>
-							<h3>
-								<a href="http://flypixel.com/n33">Sed amet ornare</a>
-							</h3>
-							<p>Ornare nulla proin odio consequat.</p>
-						</article>
-					</div>
-				</div>
-			</div>
-			<footer>
-				<a href="#top" class="button button-big">Back to Top</a>
-			</footer>
-			<div class="row">
-				<div class="12u">
-					<hr />
-					<h3>Find Us on ...</h3>
-					<ul class="social">
-						<li class="twitter"><a href="http://twitter.com/n33co"
-							class="fa fa-twitter"><span>Twitter</span></a></li>
-						<li class="facebook"><a href="#" class="fa fa-facebook"><span>Facebook</span></a></li>
-						<li class="dribbble"><a href="http://dribbble.com/n33"
-							class="fa fa-dribbble"><span>Dribbble</span></a></li>
-						<li class="linkedin"><a href="#" class="fa fa-linkedin"><span>LinkedIn</span></a></li>
-						<li class="tumblr"><a href="#" class="fa fa-tumblr"><span>Tumblr</span></a></li>
-						<li class="googleplus"><a href="#" class="fa fa-google-plus"><span>Google+</span></a></li>
-						<li class="github"><a href="http://github.com/n33"
-							class="fa fa-github"><span>Github</span></a></li>
-						<!--
+					<footer>
+						<a href="#top" class="button button-big">Back to Top</a>
+					</footer>
+					<div class="row">
+							<div class="12u">
+								<hr />
+								<h3>Find Us on ...</h3>
+								<ul class="social">
+									<li class="twitter"><a href="http://twitter.com/n33co" class="fa fa-twitter"><span>Twitter</span></a></li>
+									<li class="facebook"><a href="#" class="fa fa-facebook"><span>Facebook</span></a></li>
+									<li class="dribbble"><a href="http://dribbble.com/n33" class="fa fa-dribbble"><span>Dribbble</span></a></li>
+									<li class="linkedin"><a href="#" class="fa fa-linkedin"><span>LinkedIn</span></a></li>
+									<li class="tumblr"><a href="#" class="fa fa-tumblr"><span>Tumblr</span></a></li>
+									<li class="googleplus"><a href="#" class="fa fa-google-plus"><span>Google+</span></a></li>
+									<li class="github"><a href="http://github.com/n33" class="fa fa-github"><span>Github</span></a></li>
+									<!--
 									<li class="rss"><a href="#" class="fa fa-rss"><span>RSS</span></a></li>
 									<li class="instagram"><a href="#" class="fa fa-instagram"><span>Instagram</span></a></li>
 									<li class="foursquare"><a href="#" class="fa fa-foursquare"><span>Foursquare</span></a></li>
@@ -605,18 +623,18 @@
 									<li class="flickr"><a href="#" class="fa fa-flickr"><span>Flickr</span></a></li>
 									<li class="vimeo"><a href="#" class="fa fa-vimeo"><span>Vimeo</span></a></li>
 									-->
-					</ul>
-					<hr />
-				</div>
+								</ul>
+								<hr />
+							</div>
+						</div>
+					<footer>
+						<ul id="copyright">
+							<li>&copy; 2013 PAAC</li>
+							<li>Images: <a href="http://fotogrph.com">fotogrph</a></li>
+							<li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
+						</ul>
+					</footer>
+				</article>
 			</div>
-			<footer>
-				<ul id="copyright">
-					<li>&copy; 2013 Jane Doe</li>
-					<li>Images: <a href="http://fotogrph.com">fotogrph</a></li>
-					<li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
-				</ul>
-			</footer>
-		</article>
-	</div>
 </body>
 </html>
