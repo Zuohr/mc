@@ -59,12 +59,15 @@ function insertalerts(route, time, alertby, phone) {
           }
         });
       }
-
+      $("#button2").click(function(){
+		    $("#home").hide();
+		    $("#result").show();
+		});
       $(document).ready(function() {
         db.transaction(function(tx) {
           tx.executeSql('CREATE TABLE IF NOT EXISTS Alerts(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT, alert_by TEXT, phone TEXT)', []);
         });
-
+        
         $('#score_form').submit(function() {
          	insertalerts( $('#hole1').val(),  $('#time').val(),  $('#hole2').val(),  $('#email').val());
          
@@ -231,6 +234,7 @@ function insertalerts(route, time, alertby, phone) {
 	}
 
 	function changeDisplay() {
+		
 		var homeBlock = document.getElementById("home");
 		var resultBlock = document.getElementById("result");
 		if (homeBlock.style.display == "block") {
@@ -362,12 +366,11 @@ function insertalerts(route, time, alertby, phone) {
 								</div>
 								<div class="row">
 									<div class="12u">
-										<input type="button" value="Search" id="home" class="button"
-											onclick="changeDisplay()" />
-										<!-- <a href="#" class="button form-button-submit" onclick = "changeDisplay();">Search</a> -->
-										<!--<a
-											href="#" class="button button-alt form-button-reset">Clear
-											Form</a>-->
+										<!--  <input type="button" value="Search" id="home" class="button"
+											onclick="changeDisplay()" />-->
+										<a class="button button-big" id="button2" onclick = "changeDisplay();">Search</a> 
+										<a href="#" class="button button-alt form-button-reset">Clear
+											Form</a>
 									</div>
 								</div>
 								<span>
@@ -426,7 +429,7 @@ function insertalerts(route, time, alertby, phone) {
 									<td>6 min</td>
 								</tr>
 							</table>
-							<button class="button">Subscribe</button>
+						<a href="#portfolio" class="button button-big">Subscribe</a>
 							<hr>
 							<p align="center">
 								<b>71A (in 9 min)</b>
@@ -453,7 +456,7 @@ function insertalerts(route, time, alertby, phone) {
 									<td>6 min</td>
 								</tr>
 							</table>
-							<button class="button">Subscribe</button>
+						<a href="#portfolio" class="button button-big">Subscribe</a>
 						</article>
 						<article class="box box-style2">
 							<h3 align="center">71A</h3>
@@ -482,7 +485,7 @@ function insertalerts(route, time, alertby, phone) {
 									<td>3 min</td>
 								</tr>
 							</table>
-							<button class="button">Subscribe</button>
+						<a href="#portfolio" class="button button-big">Subscribe</a>
 						</article>
 					</div>
 				</div>
