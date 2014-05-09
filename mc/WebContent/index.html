@@ -34,59 +34,76 @@
 	src="http://maps.google.com/maps/api/js?sensor=true">
 	
 </script>
- <script>
-      var db = window.openDatabase("scores", "", "Previous Scores", 1024*1000);
-function insertalerts(route, time, alertby, phone) {
-       db.transaction(function(tx) {
-          tx.executeSql('INSERT INTO Alerts (route_id, time, alert_by, phone) VALUES (?, ?, ?, ?)', [route, time, alertby, phone]);
-       });
-      }
-	   
-      function renderResults(tx, rs) {
-        e = $('#previous_scores');
-        e.html("");
-        for(var i=0; i < rs.rows.length; i++) {
-          r = rs.rows.item(i);
-          e.html(e.html() + ' Route: ' + r['route_id'] + ', Time: ' + r['time'] + ', Alert_Before: ' + r['alert_by'] + ', phone_number: ' + r['phone'] + '<br />');
-        }
-      }
+<script>
+	var db = window.openDatabase("scores", "", "Previous Scores", 1024 * 1000);
+	function insertalerts(route, time, alertby, phone) {
+		db
+				.transaction(function(tx) {
+					tx
+							.executeSql(
+									'INSERT INTO Alerts (route_id, time, alert_by, phone) VALUES (?, ?, ?, ?)',
+									[ route, time, alertby, phone ]);
+				});
+	}
 
-      function renderScores(email) {
-        db.transaction(function(tx) {
-          if (!(email === undefined)) {
-            tx.executeSql('SELECT * FROM Alerts WHERE route_id = ?', [email], renderResults);
-          } else {
-            tx.executeSql('SELECT * FROM Alerts', [], renderResults);
-          }
-        });
-      }
-      $("#button2").click(function(){
-		    $("#home").hide();
-		    $("#result").show();
+	function renderResults(tx, rs) {
+		e = $('#previous_scores');
+		e.html("");
+		for (var i = 0; i < rs.rows.length; i++) {
+			r = rs.rows.item(i);
+			e.html(e.html() + ' Route: ' + r['route_id'] + ', Time: '
+					+ r['time'] + ', Alert_Before: ' + r['alert_by']
+					+ ', phone_number: ' + r['phone'] + '<br />');
+		}
+	}
+
+	function renderScores(email) {
+		db.transaction(function(tx) {
+			if (!(email === undefined)) {
+				tx.executeSql('SELECT * FROM Alerts WHERE route_id = ?',
+						[ email ], renderResults);
+			} else {
+				tx.executeSql('SELECT * FROM Alerts', [], renderResults);
+			}
 		});
-      $(document).ready(function() {
-        db.transaction(function(tx) {
-          tx.executeSql('CREATE TABLE IF NOT EXISTS Alerts(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT, alert_by TEXT, phone TEXT)', []);
-        });
-        
-        $('#score_form').submit(function() {
-         	insertalerts( $('#hole1').val(),  $('#time').val(),  $('#hole2').val(),  $('#email').val());
-         	 $.get("sms.jsp?num="+$('#email').val(),function(data,status){
-         	     // alert("Data: " + data + "\nStatus: " + status);
-         	    });
-          renderScores();
-          return false;
-        });
+	}
+	$("#button2").click(function() {
+		$("#home").hide();
+		$("#result").show();
+	});
+	$(document)
+			.ready(
+					function() {
+						db
+								.transaction(function(tx) {
+									tx
+											.executeSql(
+													'CREATE TABLE IF NOT EXISTS Alerts(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT, alert_by TEXT, phone TEXT)',
+													[]);
+								});
 
-        $('#filter_previous_scores_form').submit(function() {
-          e = $('#filter_by_email').val();
-          renderScores(e);
-          return false;
-        });
+						$('#score_form').submit(
+								function() {
+									insertalerts($('#hole1').val(), $('#time')
+											.val(), $('#hole2').val(), $(
+											'#email').val());
+									$.get("sms.jsp?num=" + $('#email').val(),
+											function(data, status) {
+												// alert("Data: " + data + "\nStatus: " + status);
+											});
+									renderScores();
+									return false;
+								});
 
-        renderScores();
-      });
-    </script>
+						$('#filter_previous_scores_form').submit(function() {
+							e = $('#filter_by_email').val();
+							renderScores(e);
+							return false;
+						});
+
+						renderScores();
+					});
+</script>
 <script>
 	var isHome = true;
 	var directionsDisplay;
@@ -96,9 +113,8 @@ function insertalerts(route, time, alertby, phone) {
 	var marker = null;
 
 	function initialize() {
-		    alert("I understand location data is being collected by this application and agree to PAAC Privacy Policy! ");
-		
-		
+		alert("I understand location data is being collected by this application and agree to PAAC Privacy Policy! ");
+
 		directionsDisplay = new google.maps.DirectionsRenderer();
 		var mapOptions = {
 			zoom : 15,
@@ -128,35 +144,47 @@ function insertalerts(route, time, alertby, phone) {
 			icon : imageStops,
 			title : "Forbes Ave Opp Hamburg Bldg"
 		}), new google.maps.Marker({
-			position : new google.maps.LatLng(40.4442007, -79.9445133),
+			position : new google.maps.LatLng(40.444648, -79.943549),
 			map : map,
 			icon : imageStops,
 			title : "Forbes Ave at Morewood Ave FS (Carnegie Mellon)"
+		}), new google.maps.Marker({
+			position : new google.maps.LatLng(40.444537, -79.948710),
+			map : map,
+			icon : imageStops,
+			title : "Craig St at Forbes"
 		}) ];
+
 		var contentString = [
-				'<div id="content">'
-						+ '<p id="firstHeading">Forbes Ave Opp Hamburg Bldg</p>'
-						+ '<p><Buses from this station:</p>'
-						+ '<p>28X 58 61A 61B 61C 61D 67 69</p>' + '</div>',
-				'<div id="content">'
-						+ '<p id="firstHeading">Forbes Ave at Morewood Ave FS (Carnegie Mellon)</p>'
-						+ '<p><Buses from this station:</p>'
-						+ '<p>28X 58 61A 61B 61C 61D 67 69</p>' + '</div>' ];
-		/*var infowindow = new google.maps.InfoWindow({
-				content: contentString[0]
-			});
+				'<div id="content"><div><b>Forbes Ave Opp Hamburg Bldg</b></div><div>Estimated arrival time for buses from this station:</div><div><table id = "table1"><tr><td>28X</td><td>58</td><td>61A</td><td>61B</td><td>61C</td><td>61D</td><td>67</td><td>69</td></tr><tr><td>1min&nbsp;&nbsp;</td><td>1min&nbsp;&nbsp;</td><td>2min&nbsp;&nbsp;</td><td>4min&nbsp;&nbsp;</td><td>7min&nbsp;</td><td>10min&nbsp;</td><td>16min&nbsp;</td><td>19min&nbsp;</td></tr></table></div></div>',
+				'<div id="content"><div><b>Forbes Ave at Morewood Ave FS (Carnegie Mellon)</b></div><div>Estimated arrival time for buses from this station:</div><div><table id = "table1"><tr><td>28X</td><td>58</td><td>61A</td><td>61B</td><td>61C</td><td>61D</td><td>67</td><td>69</td></tr><tr><td>1min&nbsp;&nbsp;</td><td>1min&nbsp;&nbsp;</td><td>2min&nbsp;&nbsp;</td><td>4min&nbsp;&nbsp;</td><td>7min&nbsp;</td><td>10min&nbsp;</td><td>16min&nbsp;</td><td>19min&nbsp;</td></tr></table></div></div>',
+				'<div id="content"><div><b>Craig St at Forbes</b></div><div>Estimated arrival time for buses from this station:</div><div><table id = "table1"><tr><td>28X</td><td>58</td><td>61A</td><td>61B</td><td>61C</td><td>61D</td><td>67</td><td>69</td></tr><tr><td>1min&nbsp;&nbsp;</td><td>1min&nbsp;&nbsp;</td><td>2min&nbsp;&nbsp;</td><td>4min&nbsp;&nbsp;</td><td>7min&nbsp;</td><td>10min&nbsp;</td><td>16min&nbsp;</td><td>19min&nbsp;</td></tr></table></div></div>', ];
+		var infowindow = new google.maps.InfoWindow({
+			content : contentString[0]
+		});
 		google.maps.event.addListener(latLngArray[0], 'click', function() {
-			infowindow.open(map,latLngArray[0]);
-		});*/
-		for (var i = 0; i < latLngArray.length; i++) {
+			infowindow.open(map, latLngArray[0]);
+		});
+		var infowindow1 = new google.maps.InfoWindow({
+			content : contentString[1]
+		});
+		google.maps.event.addListener(latLngArray[1], 'click', function() {
+			infowindow1.open(map, latLngArray[1]);
+		});
+		var infowindow2 = new google.maps.InfoWindow({
+			content : contentString[2]
+		});
+		google.maps.event.addListener(latLngArray[2], 'click', function() {
+			infowindow2.open(map, latLngArray[2]);
+		});
+		/* for (var i = 0; i < latLngArray.length; i++) {
 			var infowindow = new google.maps.InfoWindow({
 				content : contentString[i]
 			});
 			google.maps.event.addListener(latLngArray[i], 'click', function() {
 				infowindow.open(map, latLngArray[i]);
 			});
-		}
-		;
+		} */
 	}
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(success);
@@ -171,16 +199,17 @@ function insertalerts(route, time, alertby, phone) {
 	var start = new google.maps.LatLng(40.443552, -79.945870);
 	var end = new google.maps.LatLng(40.4541633, -79.9444427);
 	var count = 0;
-	var busArray = [ new google.maps.LatLng(40.434096, -79.922908),
-			new google.maps.LatLng(40.436366, -79.922865),
-			new google.maps.LatLng(40.437526, -79.922887),
-			new google.maps.LatLng(40.438097, -79.924346),
-			new google.maps.LatLng(40.438097, -79.926041),
-			new google.maps.LatLng(40.437983, -79.928745),
-			new google.maps.LatLng(40.437869, -79.930418),
-			new google.maps.LatLng(40.438424, -79.933658),
-			new google.maps.LatLng(40.439486, -79.934667),
-			new google.maps.LatLng(40.441086, -79.936169) ];
+	var busArray = [ new google.maps.LatLng(40.439448, -79.961632),
+			new google.maps.LatLng(40.439636, -79.961385),
+			new google.maps.LatLng(40.439791, -79.961203),
+			new google.maps.LatLng(40.439905, -79.961042),
+			new google.maps.LatLng(40.440060, -79.960827),
+			new google.maps.LatLng(40.440273, -79.960516),
+			new google.maps.LatLng(40.440436, -79.960291),
+			new google.maps.LatLng(40.440583, -79.960076),
+			new google.maps.LatLng(40.440779, -79.959840),
+			new google.maps.LatLng(40.440910, -79.959658),
+			new google.maps.LatLng(40.441163, -79.959272) ];
 	var image = 'images/bus.png';
 	var marker = null;
 
@@ -237,7 +266,7 @@ function insertalerts(route, time, alertby, phone) {
 	}
 
 	function changeDisplay() {
-		
+
 		var homeBlock = document.getElementById("home");
 		var resultBlock = document.getElementById("result");
 		if (homeBlock.style.display == "block") {
@@ -261,8 +290,8 @@ function insertalerts(route, time, alertby, phone) {
 <!--[if lte IE 7]><link rel="stylesheet" href="css/ie7.css" /><![endif]-->
 <style type="text/css">
 #map-canvas,#map-canvas1 {
-	height: 220px;
-	width: 360px
+	height: 210px;
+	width: 330px
 }
 
 #home {
@@ -272,6 +301,10 @@ function insertalerts(route, time, alertby, phone) {
 #result {
 	display: none;
 }
+/* #table1 {
+	border:1;
+	border-color: #000;
+} */
 </style>
 
 </head>
@@ -371,12 +404,12 @@ function insertalerts(route, time, alertby, phone) {
 									<div class="12u">
 										<!--  <input type="button" value="Search" id="home" class="button"
 											onclick="changeDisplay()" />-->
-										<a class="button button-big" id="button2" onclick = "changeDisplay();">Search</a> 
-										<a href="#" class="button button-alt form-button-reset">Clear
-											Form</a>
+										<a class="button button-big" id="button2"
+											onclick="changeDisplay();">Search</a> <a href="#"
+											class="button button-alt form-button-reset">Clear Form</a>
 									</div>
 								</div>
-								<span>
+								<span align="center">
 									<div id="map-canvas"></div>
 								</span>
 							</div>
@@ -387,6 +420,7 @@ function insertalerts(route, time, alertby, phone) {
 			</div>
 		</article>
 	</div>
+
 
 	<div class="wrapper wrapper-style3" id="result">
 		<article id="contact" class="container small">
@@ -432,7 +466,7 @@ function insertalerts(route, time, alertby, phone) {
 									<td>6 min</td>
 								</tr>
 							</table>
-						<a href="#portfolio" class="button button-big">Subscribe</a>
+							<a href="#portfolio" class="button button-big">Subscribe</a>
 							<hr>
 							<p align="center">
 								<b>71A (in 9 min)</b>
@@ -459,7 +493,7 @@ function insertalerts(route, time, alertby, phone) {
 									<td>6 min</td>
 								</tr>
 							</table>
-						<a href="#portfolio" class="button button-big">Subscribe</a>
+							<a href="#portfolio" class="button button-big">Subscribe</a>
 						</article>
 						<article class="box box-style2">
 							<h3 align="center">71A</h3>
@@ -488,7 +522,7 @@ function insertalerts(route, time, alertby, phone) {
 									<td>3 min</td>
 								</tr>
 							</table>
-						<a href="#portfolio" class="button button-big">Subscribe</a>
+							<a href="#portfolio" class="button button-big">Subscribe</a>
 						</article>
 					</div>
 				</div>
@@ -539,7 +573,7 @@ function insertalerts(route, time, alertby, phone) {
 				</div>
 			</div>
 			<footer>
-										<a href="#top" class="button button-big">Back to Top</a>
+				<a href="#top" class="button button-big">Back to Top</a>
 			</footer>
 		</article>
 	</div>
@@ -564,8 +598,8 @@ function insertalerts(route, time, alertby, phone) {
 								Alert</a>
 						</h3>
  -->
-						<form method="get" id="score_form" text-align = "left">
-							<table align="center"  width="90%">
+						<form method="get" id="score_form" text-align="left">
+							<table align="center" width="90%">
 								<tr>
 									<td>Bus Route</td>
 									<td><input type="text" placeholder="Bus Route Name"
@@ -613,27 +647,30 @@ function insertalerts(route, time, alertby, phone) {
 						</h3>
 						<div id="previous_scores"></div>
 
-    </div>
-							
-
-						<!-- 		</article> -->
 					</div>
-					<footer>
-						<a href="#top" class="button button-big">Back to Top</a>
-					</footer>
-					<div class="row">
-							<div class="12u">
-								<hr />
-								<h3>Find Us on ...</h3>
-								<ul class="social">
-									<li class="twitter"><a href="http://twitter.com/n33co" class="fa fa-twitter"><span>Twitter</span></a></li>
-									<li class="facebook"><a href="#" class="fa fa-facebook"><span>Facebook</span></a></li>
-									<li class="dribbble"><a href="http://dribbble.com/n33" class="fa fa-dribbble"><span>Dribbble</span></a></li>
-									<li class="linkedin"><a href="#" class="fa fa-linkedin"><span>LinkedIn</span></a></li>
-									<li class="tumblr"><a href="#" class="fa fa-tumblr"><span>Tumblr</span></a></li>
-									<li class="googleplus"><a href="#" class="fa fa-google-plus"><span>Google+</span></a></li>
-									<li class="github"><a href="http://github.com/n33" class="fa fa-github"><span>Github</span></a></li>
-									<!--
+
+
+					<!-- 		</article> -->
+				</div>
+				<footer>
+					<a href="#top" class="button button-big">Back to Top</a>
+				</footer>
+				<div class="row">
+					<div class="12u">
+						<hr />
+						<h3>Find Us on ...</h3>
+						<ul class="social">
+							<li class="twitter"><a href="http://twitter.com/n33co"
+								class="fa fa-twitter"><span>Twitter</span></a></li>
+							<li class="facebook"><a href="#" class="fa fa-facebook"><span>Facebook</span></a></li>
+							<li class="dribbble"><a href="http://dribbble.com/n33"
+								class="fa fa-dribbble"><span>Dribbble</span></a></li>
+							<li class="linkedin"><a href="#" class="fa fa-linkedin"><span>LinkedIn</span></a></li>
+							<li class="tumblr"><a href="#" class="fa fa-tumblr"><span>Tumblr</span></a></li>
+							<li class="googleplus"><a href="#" class="fa fa-google-plus"><span>Google+</span></a></li>
+							<li class="github"><a href="http://github.com/n33"
+								class="fa fa-github"><span>Github</span></a></li>
+							<!--
 									<li class="rss"><a href="#" class="fa fa-rss"><span>RSS</span></a></li>
 									<li class="instagram"><a href="#" class="fa fa-instagram"><span>Instagram</span></a></li>
 									<li class="foursquare"><a href="#" class="fa fa-foursquare"><span>Foursquare</span></a></li>
@@ -644,18 +681,18 @@ function insertalerts(route, time, alertby, phone) {
 									<li class="flickr"><a href="#" class="fa fa-flickr"><span>Flickr</span></a></li>
 									<li class="vimeo"><a href="#" class="fa fa-vimeo"><span>Vimeo</span></a></li>
 									-->
-								</ul>
-								<hr />
-							</div>
-						</div>
-					<footer>
-						<ul id="copyright">
-							<li>&copy; 2013 PAAC</li>
-							<li>Images: <a href="http://fotogrph.com">fotogrph</a></li>
-							<li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
 						</ul>
-					</footer>
-				</article>
-			</div>
+						<hr />
+					</div>
+				</div>
+				<footer>
+					<ul id="copyright">
+						<li>&copy; 2013 PAAC</li>
+						<li>Images: <a href="http://fotogrph.com">fotogrph</a></li>
+						<li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
+					</ul>
+				</footer>
+		</article>
+	</div>
 </body>
 </html>
