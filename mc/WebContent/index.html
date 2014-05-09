@@ -35,75 +35,59 @@
 	
 </script>
 <script>
-	var db = window.openDatabase("scores", "", "Previous Scores", 1024 * 1000);
-	function insertalerts(route, time, alertby, phone) {
-		db
-				.transaction(function(tx) {
-					tx
-							.executeSql(
-									'INSERT INTO Alerts (route_id, time, alert_by, phone) VALUES (?, ?, ?, ?)',
-									[ route, time, alertby, phone ]);
-				});
-	}
+      var db = window.openDatabase("alerts_db", "1", "des", 2*1024*1000);
+function insertalerts(route, time,origin, alertby, phone) {
+       db.transaction(function(tx) {
+          tx.executeSql('INSERT INTO Alerts1 (route_id, time,origin, alert_by, phone) VALUES (?, ?, ?, ?, ?)', [route, time,origin, alertby, phone]);
+       });
+      }
+	   
+      function renderResults(tx, rs) {
+        e = $('#previous_scores');
+        e.html("");
+        for(var i=0; i < rs.rows.length; i++) {
+          r = rs.rows.item(i);
+          e.html(e.html() + '<tr><td>' + r['route_id'] + '(' + r['time'] +') @ ' + r['origin'] + '</td></tr>');
+        }
+        e.html()+"</table>";
+      }
 
-	function renderResults(tx, rs) {
-		e = $('#previous_scores');
-		e.html("");
-		for (var i = 0; i < rs.rows.length; i++) {
-			r = rs.rows.item(i);
-			e.html(e.html() + ' Route: ' + r['route_id'] + ', Time: '
-					+ r['time'] + ', Alert_Before: ' + r['alert_by']
-					+ ', phone_number: ' + r['phone'] + '<br />');
-		}
-	}
-
-	function renderScores(email) {
-		db.transaction(function(tx) {
-			if (!(email === undefined)) {
-				tx.executeSql('SELECT * FROM Alerts WHERE route_id = ?',
-						[ email ], renderResults);
-			} else {
-				tx.executeSql('SELECT * FROM Alerts', [], renderResults);
-			}
+      function renderScores(email) {
+        db.transaction(function(tx) {
+          if (!(email === undefined)) {
+            tx.executeSql('SELECT * FROM Alerts1 WHERE route_id = ?', [email], renderResults);
+          } else {
+            tx.executeSql('SELECT * FROM Alerts1', [], renderResults);
+          }
+        });
+      }
+      $("#button2").click(function(){
+		    $("#home").hide();
+		    $("#result").show();
 		});
-	}
-	$("#button2").click(function() {
-		$("#home").hide();
-		$("#result").show();
-	});
-	$(document)
-			.ready(
-					function() {
-						db
-								.transaction(function(tx) {
-									tx
-											.executeSql(
-													'CREATE TABLE IF NOT EXISTS Alerts(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT, alert_by TEXT, phone TEXT)',
-													[]);
-								});
+      $(document).ready(function() {
+        db.transaction(function(tx) {
+          tx.executeSql('CREATE TABLE IF NOT EXISTS Alerts1(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT,origin TEXT, alert_by TEXT, phone TEXT)', []);
+        });
+        
+        $('#score_form').submit(function() {
+         	insertalerts( $('#hole1').val(),  $('#timeb').val(),$('#origin').val(),  $('#hole2').val(),  $('#email').val());
+         	 $.get("sms.jsp?num="+$('#email').val(),function(data,status){
+         	     // alert("Data: " + data + "\nStatus: " + status);
+         	    });
+          renderScores();
+          return false;
+        });
 
-						$('#score_form').submit(
-								function() {
-									insertalerts($('#hole1').val(), $('#time')
-											.val(), $('#hole2').val(), $(
-											'#email').val());
-									$.get("sms.jsp?num=" + $('#email').val(),
-											function(data, status) {
-												// alert("Data: " + data + "\nStatus: " + status);
-											});
-									renderScores();
-									return false;
-								});
+        $('#filter_previous_scores_form').submit(function() {
+          e = $('#filter_by_email').val();
+          renderScores(e);
+          return false;
+        });
 
-						$('#filter_previous_scores_form').submit(function() {
-							e = $('#filter_by_email').val();
-							renderScores(e);
-							return false;
-						});
-
-						renderScores();
-					});
-</script>
+        renderScores();
+      });
+    </script>
 <script>
 	var isHome = true;
 	var directionsDisplay;
@@ -606,8 +590,13 @@
 										id="hole1" name="hole1" /></td>
 								</tr>
 								<tr>
+									<td>Boarding Point</td>
+									<td><input type="text" placeholder="Origin"
+										id="origin" name="origin" /></td>
+								</tr>
+								<tr>
 									<td>Bus Time</td>
-									<td><input type="time" id="time" name="time"
+									<td><input type="time" id="timeb" name="timeb"
 										placeholder="Specify route Time?" /></td>
 								</tr>
 								<tr>
