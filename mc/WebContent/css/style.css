@@ -25,7 +25,7 @@
 	{
 		font-family: 'Open Sans', sans-serif;
 		line-height: 1.85em;
-		color: #888;
+		color: #000;
 		font-weight: 300;
 	}
 
@@ -86,24 +86,14 @@
 	{
 		font-style: italic;
 	}
-	
-	form
-	{
-	}
-	
-		form input,
-		form select,
-		form textarea
-		{
-			-webkit-appearance: none;
-		}
 
-		form input[type=text],
-		form input[type=password],
-		form select,
-		form textarea
-		{
-			border: 0;
+	/*time {
+		font-family: 'Open Sans', sans-serif;
+		line-height: 1.85em;
+		color: #888;
+		font-weight: 300;
+		-webkit-appearance: none;
+		border: 0;
 			padding: 0.75em;
 			font-size: 1em;
 			border-radius: 8px;
@@ -116,45 +106,87 @@
 			-o-transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
 			-ms-transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
 			transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+	}
+	time:focus
+		{
+			background: #252525;
+			box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.05), 0px 1px 0px 0px rgba(255,255,255,0.025), inset 0px 0px 2px 1px #74CAEE;
+		}*/
+
+
+	form
+	{
+	}
+	
+		form input,
+		form select,
+		form textarea,
+		{
+			-webkit-appearance: none;
+		}
+
+		form input[type=text],
+		form input[type=time],
+		form input[type=datetime],
+		form input[type=password],
+		form select,
+		form textarea
+		{
+			border: 0;
+			padding: 0.75em;
+			font-size: 1em;
+			border-radius: 8px;
+			background: #fff;
+			color: #000;
+			box-shadow: inset 0px 2px 5px 0px rgba(255,255,255,1), 0px 1px 0px 0px rgba(255,255,255,1);
+			width: 100%;
+			-moz-transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+			-webkit-transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+			-o-transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+			-ms-transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+			transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
 		}
 
 		form input[type=text]:focus,
 		form input[type=password]:focus,
+		form input[type=time]:focus,
+		form input[type=datetime]:focus,
 		form select:focus,
 		form textarea:focus
 		{
-			background: #252525;
+			background: #fff;
 			box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.05), 0px 1px 0px 0px rgba(255,255,255,0.025), inset 0px 0px 2px 1px #74CAEE;
 		}
 
-		form textarea
+		form textarea,
+		form time
 		{
 			height: 15em;
 		}
 		
 		form .formerize-placeholder
 		{
-			color: #555 !important;
+			color: #aaa !important;
 		}
 
 		form ::-webkit-input-placeholder
 		{
-			color: #555 !important;
+			color: #aaa !important;
 		}
 
 		form :-moz-placeholder
 		{
-			color: #555 !important;
+			color: #aaa !important;
 		}
 
 		form ::-moz-placeholder
 		{
-			color: #555 !important;
+			color: #aaa !important;
 		}
 
 		form :-ms-input-placeholder
 		{
-			color: #555 !important;
+			color: #aaa !important;
 		}
 
 		form ::-moz-focus-inner

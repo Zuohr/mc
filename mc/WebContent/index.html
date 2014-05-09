@@ -325,7 +325,7 @@
 	</div>
 	<!-- Contact -->
 
-	<div class="wrapper wrapper-style4" id="home">
+	<div class="wrapper wrapper-style3" id="home">
 		<article id="contact" class="container small">
 			<!--<header>
 				<span>Your Current Location
@@ -356,9 +356,9 @@
 											</tr>
 											<tr>
 												<td>Depart at&nbsp;&nbsp;&nbsp;</td>
-												<td><input type="text" name="time" required="required"
+												<td><input type="time" id="time" name="daytime" /> <!-- <input type="text" name="time" required="required"
 													id="time" placeholder="hh:mm" value="Leave now"
-													onclick="if (this.value == 'Leave now') {this.value = '';}" />
+													onclick="if (this.value == 'Leave now') {this.value = '';}" /> -->
 												</td>
 											</tr>
 										</table>
@@ -566,62 +566,64 @@
 					<div class="12u"></div>
 				</div>
 				<div class="row">
-					<div class="4u">
-						<article class="box box-style2">
-							<a class="image image-full"><img src="images/portfolio01.jpg"
-								alt="" /></a>
-							<h3>
-								<a
-									href="http://flypixel.com/generic-smartphone/8949517882265310">Create
-									Alert</a>
-							</h3>
+					<div class="6u">
+						<!-- <article class="box box-style2"> -->
+						<!-- <h3>
+							<a href="http://flypixel.com/generic-smartphone/8949517882265310">Create
+								Alert</a>
+						</h3>
+ -->
+						<form method="get" id="score_form" text-align = "left">
+							<table align="center"  width="90%">
+								<tr>
+									<td>Bus Route</td>
+									<td><input type="text" placeholder="Bus Route Name"
+										id="hole1" name="hole1" /></td>
+								</tr>
+								<tr>
+									<td>Bus Time</td>
+									<td><input type="time" id="time" name="time"
+										placeholder="Specify route Time?" /></td>
+								</tr>
+								<tr>
+									<td>Alert before&nbsp;&nbsp;&nbsp;</td>
+									<td><input type="text"
+										placeholder="Alert before no. of stops?" min="1" id="hole2"
+										name="hole2" size="2" step="1" /></td>
+								</tr>
+								<tr>
+									<td>Phone Number</td>
+									<td><input type="text" id="email"
+										placeholder="Phone number" size="10" /></td>
+								</tr>
+							</table>
 
-							<form method="get" id="score_form">
-								<b>
-									<div>
-										<label for="1">Bus Route:</label> <input type="text"
-											placeholder="Bus Route Name" id="hole1" name="hole1" />
-									</div>
-									<div>
-										<label for="2">Bus Time:</label><br> <input type="time"
-											id="time" name="time" placeholder="Specify route Time?" />
-									</div>
-									<div>
-										<label for="2">Alert Before:</label> <input type="text"
-											placeholder="Alert before no. of stops?" min="1" id="hole2"
-											name="hole2" size="2" step="1" />
-									</div>
-									<div>
-										<label for="2">Phone Number:</label> <input type="text"
-											id="email" placeholder="Phone number" size="10" />
-									</div>
-									<div>
-										<input type="submit" class="button button-big"
-											value="Create Alert" />
-									</div>
-								</b>
-							</form>
 							<div>
-								<br>
-								<h3>
-									<a href="#">Filter Alerts</a>
-								</h3>
-								<form id="filter_previous_scores_form">
-									<input type="text" placeholder="Filter Alerts by routes"
-										size="40" id="filter_by_email" /><br /> <input type="submit"
-										class="button button-big" value="Filter" />
-								</form>
+								<input type="submit" class="button button-big"
+									value="Create Alert" />
 							</div>
+							</b>
+						</form>
+						<div>
 							<br>
 							<h3>
-								<a
-									href="http://flypixel.com/generic-smartphone/8949517882265310">Recent
-									Alerts</a>
+								<a href="#">Filter Alerts</a>
 							</h3>
-							<div id="previous_scores"></div>
+							<form id="filter_previous_scores_form">
+								<input type="text" placeholder="Filter Alerts by routes"
+									size="40" id="filter_by_email" /><br /> <input type="submit"
+									class="button button-big" value="Filter" />
+							</form>
+						</div>
+						<br>
+						<h3>
+							<a href="http://flypixel.com/generic-smartphone/8949517882265310">Recent
+								Alerts</a>
+						</h3>
+						<div id="previous_scores"></div>
 
 
-						</article>
+						<!-- 		</article> -->
 					</div>
 
 				</div>
