@@ -13,5 +13,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="C:/Users/Prem/Desktop/yash/httpcomponents-client-4.3.3-osgi-bin/httpcomponents-client-4.3.3/org.apache.httpcomponents.httpclient_4.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Prem/Desktop/yash/twilio-java-sdk-3.4.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Prem/Desktop/yash/twilio-java-sdk-3.4.3-jar-with-dependencies.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
