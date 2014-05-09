@@ -35,61 +35,80 @@
 	
 </script>
 <script>
-      var db = window.openDatabase("alerts_db", "1", "des", 2*1024*1000);
-function insertalerts(route, time,origin, alertby, phone) {
-       db.transaction(function(tx) {
-          tx.executeSql('INSERT INTO Alerts1 (route_id, time,origin, alert_by, phone) VALUES (?, ?, ?, ?, ?)', [route, time,origin, alertby, phone]);
-       });
-      }
-	   
-      function renderResults(tx, rs) {
-        e = $('#previous_scores');
-        e.html("");
-        for(var i=0; i < rs.rows.length; i++) {
-          r = rs.rows.item(i);
-          e.html(e.html() + '<tr><td>' + r['route_id'] + '(' + r['time'] +') @ ' + r['origin'] + '</td></tr>');
-        }
-        e.html()+"</table>";
-      }
+	var db = window.openDatabase("alerts_db", "1", "des", 2 * 1024 * 1000);
+	function insertalerts(route, time, origin, alertby, phone) {
+		db
+				.transaction(function(tx) {
+					tx
+							.executeSql(
+									'INSERT INTO Alerts1 (route_id, time,origin, alert_by, phone) VALUES (?, ?, ?, ?, ?)',
+									[ route, time, origin, alertby, phone ]);
+				});
+	}
 
-      function renderScores(email) {
-        db.transaction(function(tx) {
-          if (!(email === undefined)) {
-            tx.executeSql('SELECT * FROM Alerts1 WHERE route_id = ?', [email], renderResults);
-          } else {
-            tx.executeSql('SELECT * FROM Alerts1', [], renderResults);
-          }
-        });
-      }
-      $("#button2").click(function(){
-		    $("#home").hide();
-		    $("#result").show();
+	function renderResults(tx, rs) {
+		e = $('#previous_scores');
+		e.html("");
+		for (var i = 0; i < rs.rows.length; i++) {
+			r = rs.rows.item(i);
+			e.html(e.html() + '<tr><td>' + r['route_id'] + '(' + r['time']
+					+ ') @ ' + r['origin'] + '</td></tr>');
+		}
+		e.html() + "</table>";
+	}
+
+	function renderScores(email) {
+		db.transaction(function(tx) {
+			if (!(email === undefined)) {
+				tx.executeSql('SELECT * FROM Alerts1 WHERE route_id = ?',
+						[ email ], renderResults);
+			} else {
+				tx.executeSql('SELECT * FROM Alerts1', [], renderResults);
+			}
 		});
-      $(document).ready(function() {
-        db.transaction(function(tx) {
-          tx.executeSql('CREATE TABLE IF NOT EXISTS Alerts1(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT,origin TEXT, alert_by TEXT, phone TEXT)', []);
-        });
-        
-        $('#score_form').submit(function() {
-         	insertalerts( $('#hole1').val(),  $('#timeb').val(),$('#origin').val(),  $('#hole2').val(),  $('#email').val());
-         	 $.get("sms.jsp?num="+$('#email').val(),function(data,status){
-         	     // alert("Data: " + data + "\nStatus: " + status);
-         	    });
-          renderScores();
-          return false;
-        });
+	}
+	$("#button2").click(function() {
+		$("#home").hide();
+		$("#result").show();
+	});
+	$(document)
+			.ready(
+					function() {
+						db
+								.transaction(function(tx) {
+									tx
+											.executeSql(
+													'CREATE TABLE IF NOT EXISTS Alerts1(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT,origin TEXT, alert_by TEXT, phone TEXT)',
+													[]);
+								});
 
-        $('#filter_previous_scores_form').submit(function() {
-          e = $('#filter_by_email').val();
-          renderScores(e);
-          return false;
-        });
+						$('#score_form')
+								.submit(
+										function() {
+											insertalerts($('#hole1').val(), $(
+													'#timeb').val(), $(
+													'#origin').val(), $(
+													'#hole2').val(),
+													$('#email').val());
+											$.get("sms.jsp?num="
+													+ $('#email').val(),
+													function(data, status) {
+														// alert("Data: " + data + "\nStatus: " + status);
+													});
+											renderScores();
+											return false;
+										});
 
-        renderScores();
-      });
-    </script>
+						$('#filter_previous_scores_form').submit(function() {
+							e = $('#filter_by_email').val();
+							renderScores(e);
+							return false;
+						});
+
+						renderScores();
+					});
+</script>
 <script>
-	var isHome = true;
 	var directionsDisplay;
 	var map;
 	var start = new google.maps.LatLng(40.443552, -79.945870);
@@ -194,8 +213,22 @@ function insertalerts(route, time,origin, alertby, phone) {
 			new google.maps.LatLng(40.440779, -79.959840),
 			new google.maps.LatLng(40.440910, -79.959658),
 			new google.maps.LatLng(40.441163, -79.959272) ];
+	var count1 = 0;
+	var busArray1 = [ new google.maps.LatLng(40.434096, -79.922908),
+			new google.maps.LatLng(40.436366, -79.922865),
+			new google.maps.LatLng(40.437526, -79.922887),
+			new google.maps.LatLng(40.438097, -79.924346),
+			new google.maps.LatLng(40.438097, -79.926041),
+			new google.maps.LatLng(40.437983, -79.928745),
+			new google.maps.LatLng(40.437869, -79.930418),
+			new google.maps.LatLng(40.438424, -79.933658),
+			new google.maps.LatLng(40.439486, -79.934667),
+			new google.maps.LatLng(40.441086, -79.936169) ];
 	var image = 'images/bus.png';
 	var marker = null;
+	var marker1 = null;
+	var timer1 = setInterval("drawBus1();", 2000);
+	var timer2 = null;
 
 	function initialize1() {
 		directionsDisplay = new google.maps.DirectionsRenderer();
@@ -230,7 +263,20 @@ function insertalerts(route, time,origin, alertby, phone) {
 				directionsDisplay.setDirections(result);
 			}
 		});
-		setInterval("drawBus();", 2000);
+		clearInterval(timer1);
+		clearInterval(timer2);
+		if (marker != null) {
+			marker.setMap(null);
+		}
+		if (marker1 != null) {
+			marker1.setMap(null);
+		}
+		if (document.getElementById('route').value != '71A') {
+			timer1 = setInterval("drawBus1();", 2000);
+		} else {
+			timer2 = setInterval("drawBus();", 2000);
+		}
+
 	}
 
 	function getBusArray() {
@@ -243,6 +289,22 @@ function insertalerts(route, time,origin, alertby, phone) {
 		}
 		marker = new google.maps.Marker({
 			position : busArray[(count++) % 10],
+			map : map1,
+			icon : image,
+			title : 'Bus is here'
+		});
+	}
+
+	function getBusArray1() {
+		return busArray1[(count1++) % 10];
+	}
+
+	function drawBus1() {
+		if (marker1 != null) {
+			marker1.setMap(null);
+		}
+		marker1 = new google.maps.Marker({
+			position : busArray1[(count++) % 10],
 			map : map1,
 			icon : image,
 			title : 'Bus is here'
@@ -591,8 +653,8 @@ function insertalerts(route, time,origin, alertby, phone) {
 								</tr>
 								<tr>
 									<td>Boarding Point</td>
-									<td><input type="text" placeholder="Origin"
-										id="origin" name="origin" /></td>
+									<td><input type="text" placeholder="Origin" id="origin"
+										name="origin" /></td>
 								</tr>
 								<tr>
 									<td>Bus Time</td>
