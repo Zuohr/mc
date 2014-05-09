@@ -201,7 +201,7 @@
 	var directionsDisplay;
 	var directionsService = new google.maps.DirectionsService();
 	var map1;
-	var start = new google.maps.LatLng(40.444613, -79.948502);
+	var start = new google.maps.LatLng(40.443552, -79.945870);
 	var end = new google.maps.LatLng(40.4541633, -79.9444427);
 	var count = 0;
 	var busArray = [ new google.maps.LatLng(40.439448, -79.961632),
@@ -255,7 +255,9 @@
 		}
 		document.getElementById("61Ctime").innerHTML = " " + hour + ":"
 		+ minute;
-		minute += 4;
+		var hour = date.getHours();
+		var minute = date.getMinutes();
+		minute += 9;
 		if (minute >= 60) {
 			hour += 1;
 			minute -= 60;
@@ -265,7 +267,9 @@
 		}
 		document.getElementById("71Atime").innerHTML = " " + hour + ":"
 		+ minute;
-		minute += 4;
+		var hour = date.getHours();
+		var minute = date.getMinutes();
+		minute += 13;
 		if (minute >= 60) {
 			hour += 1;
 			minute -= 60;
