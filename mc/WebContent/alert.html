@@ -14,6 +14,23 @@
 		<script src="js/jquery.min.js"></script>
 		<script src="js/config.js"></script>
 		<script src="js/skel.min.js"></script>
+		<style>
+		*::-webkit-input-placeholder {
+    color: white;
+}
+*:-moz-placeholder {
+    /* FF 4-18 */
+    color: white;
+}
+*::-moz-placeholder {
+    /* FF 19+ */
+    color: white;
+}
+*:-ms-input-placeholder {
+    /* IE 10+ */
+    color: white;
+}
+		</style>
 		<noscript>
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -72,7 +89,6 @@ function insertalerts(route, time, alertby, phone) {
     </script>
 	</head>
 	<body>
-
 		<!-- Nav -->
 			<nav id="nav">
 				<ul class="container">
@@ -246,32 +262,35 @@ if (navigator.geolocation) {
 									<a class="image image-full"><img src="images/portfolio01.jpg" alt="" /></a>
 									<h3><a href="http://flypixel.com/generic-smartphone/8949517882265310">Create Alert</a></h3>
 									
-					   <form method="get" id="score_form">
+					   <form method="get" id="score_form"><b>
       <div>
-        <label for="1"></label>
+        <label for="1">Bus Route:</label>
         <input type="text" placeholder="Bus Route Name" id="hole1" name="hole1"  />
       </div>
 	  <div>
-	   <input type="datetime-local" id="time" name="time" value="2014-05-20T16:39:57" />
+	  <label for="2">Bus Time:</label><br>
+	   <input type="time" id="time" name="time" placeholder="Specify route Time?" />
 	  </div>
       <div>
-        <label for="2"></label>
-        <input type="number" placeholder="Alert before no. of stops?" min="1"  id="hole2" name="hole2" size="2" step="1" />
+        <label for="2">Alert Before:</label>
+        <input type="text" placeholder="Alert before no. of stops?" min="1"  id="hole2" name="hole2" size="2" step="1" />
       </div>
       <div>
+      <label for="2">Phone Number:</label>
         <input type="text" id="email" placeholder="Phone number" size="10"/>
       </div>
       <div>
         <input type="submit" class="button button-big" value="Create Alert" />
       </div>
+      </b>
     </form>
-    <div>
-<h3><a href="http://flypixel.com/generic-smartphone/8949517882265310">Filter</a></h3>
+    <div><br>
+<h3><a href="#">Filter Alerts</a></h3>
       <form id="filter_previous_scores_form">
         <input type="text" placeholder="Filter Alerts by routes" size="40" id="filter_by_email" /><br />
         <input type="submit"  class="button button-big" value="Filter" />
       </form>
-    </div>
+    </div><br>
 <h3><a href="http://flypixel.com/generic-smartphone/8949517882265310">Recent Alerts</a></h3>
     <div id="previous_scores">
 

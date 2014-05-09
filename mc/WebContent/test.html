@@ -6,7 +6,7 @@
         <script>
 		$(document).ready(function() {
     $.ajax({
-        url: "http://rest-service.guides.spring.io/greeting"
+        url: "sms.jsp"
     }).then(function(data) {
        $('.greeting-id').append(data.id);
        $('.greeting-content').append(data.content);
@@ -16,6 +16,7 @@
     </head>
 
     <body>
+    <input type="text" value="4127657" id="tel">
         <div>
             <p class="greeting-id">The ID is </p>
             <p class="greeting-content">The content is </p>
