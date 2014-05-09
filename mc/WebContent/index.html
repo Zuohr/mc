@@ -116,8 +116,10 @@
 	var marker = null;
 
 	function initialize() {
-		alert("I understand location data is being collected by this application and agree to PAAC Privacy Policy! ");
-
+		var answer = confirm ("I understand location data is being collected by this application and agree to PAAC Privacy Policy!");
+		if (!answer)
+		window.location="error.html";
+		
 		directionsDisplay = new google.maps.DirectionsRenderer();
 		var mapOptions = {
 			zoom : 15,
@@ -199,7 +201,7 @@
 	var directionsDisplay;
 	var directionsService = new google.maps.DirectionsService();
 	var map1;
-	var start = new google.maps.LatLng(40.443552, -79.945870);
+	var start = new google.maps.LatLng(40.444613, -79.948502);
 	var end = new google.maps.LatLng(40.4541633, -79.9444427);
 	var count = 0;
 	var busArray = [ new google.maps.LatLng(40.439448, -79.961632),
@@ -239,6 +241,40 @@
 		map1 = new google.maps.Map(document.getElementById("map-canvas1"),
 				mapOptions);
 		directionsDisplay.setMap(map1);
+		/* getTime(); */
+		var date = new Date();
+		var hour = date.getHours();
+		var minute = date.getMinutes();
+		minute += 5;
+		if (minute >= 60) {
+			hour += 1;
+			minute -= 60;
+		}
+		if (minute < 10) {
+			minute = "0" + minute;
+		}
+		document.getElementById("61Ctime").innerHTML = " " + hour + ":"
+		+ minute;
+		minute += 4;
+		if (minute >= 60) {
+			hour += 1;
+			minute -= 60;
+		}
+		if (minute < 10) {
+			minute = "0" + minute;
+		}
+		document.getElementById("71Atime").innerHTML = " " + hour + ":"
+		+ minute;
+		minute += 4;
+		if (minute >= 60) {
+			hour += 1;
+			minute -= 60;
+		}
+		if (minute < 10) {
+			minute = "0" + minute;
+		}
+		document.getElementById("71Atime1").innerHTML = " " + hour + ":"
+		+ minute;
 	}
 
 	function calcRoute() {
@@ -326,6 +362,7 @@
 		}
 	}
 </script>
+
 <noscript>
 	<link rel="stylesheet" href="css/skel-noscript.css" />
 	<link rel="stylesheet" href="css/style.css" />
@@ -482,7 +519,7 @@
 				<div class="row">
 					<div class="4u">
 
-						<article class="box box-style2" align = "center">
+						<article class="box box-style2" align="center">
 							<h3 align="center">61C - 71A</h3>
 							<p align="center">
 								<b>arrive in 5 min, take 15 min in total</b>
@@ -490,56 +527,55 @@
 							<p align="center">
 								<b>61C (in 5 min)</b>
 							</p>
-							<b><table text-align = "left">
-								<tr>
-									<td text-align = "left">Get on at</td>
-									<td text-align = "left">Forbes Ave Opp Hamburg Bldg (about 3 min)</td>
-								</tr>
-								<tr>
-									<td>Get off at</td>
-									<td>5th Ave at Bigelow Blvd (Pitt) (5 min, 4 stops)</td>
-								</tr>
-								<tr>
-									<td>Currently at</td>
-									<td>5th Ave at Bigelow Blvd (Pitt) (3 stops away)</td>
-								</tr>
-								<tr>
-									<td>Estimated Arrival&nbsp;&nbsp;&nbsp;</td>
-									<td>12:07 pm</td>
-								</tr>
-								<tr>
-									<td>Wait Time</td>
-									<td>6 min</td>
-								</tr>
-							</table>
-							<a href="#portfolio" class="button button-big">Subscribe</a>
-							<hr>
-							<p align="center">
-								<b>71A (in 9 min)</b>
-							</p>
-							<table>
-								<tr>
-									<td>Get on at</td>
-									<td>5th Ave at Bigelow Blvd (Pitt) (about 0 min)</td>
-								</tr>
-								<tr>
-									<td>Get off at</td>
-									<td>Centre Ave at Morewood Ave (6 min, 9 stops)</td>
-								</tr>
-								<tr>
-									<td>Currently at</td>
-									<td>5th Ave at Bigelow Blvd (Pitt) (2 stops away)</td>
-								</tr>
-								<tr>
-									<td>Estimated Arrival&nbsp;&nbsp;&nbsp;</td>
-									<td>12:07 pm</td>
-								</tr>
-								<tr>
-									<td>Wait Time</td>
-									<td>6 min</td>
-								</tr>
-							</table>
-							<a href="#portfolio" class="button button-big">Subscribe</a>
+							<b><table text-align="left">
+									<tr>
+										<td text-align="left">Get on at</td>
+										<td text-align="left">Forbes Ave Opp Hamburg Bldg (about
+											3 min)</td>
+									</tr>
+									<tr>
+										<td>Get off at</td>
+										<td>5th Ave at Bigelow Blvd (Pitt) (5 min, 4 stops)</td>
+									</tr>
+									<tr>
+										<td>Currently at</td>
+										<td>5th Ave at Bigelow Blvd (Pitt) (3 stops away)</td>
+									</tr>
+									<tr>
+										<td>Estimated Arrival&nbsp;&nbsp;&nbsp;</td>
+										<td id="61Ctime"></td>
+									</tr>
+									<tr>
+										<td>Wait Time</td>
+										<td>6 min</td>
+									</tr>
+								</table> <a href="#portfolio" class="button button-big">Subscribe</a>
+								<hr>
+								<p align="center">
+									<b>71A (in 9 min)</b>
+								</p>
+								<table>
+									<tr>
+										<td>Get on at</td>
+										<td>5th Ave at Bigelow Blvd (Pitt) (about 0 min)</td>
+									</tr>
+									<tr>
+										<td>Get off at</td>
+										<td>Centre Ave at Morewood Ave (6 min, 9 stops)</td>
+									</tr>
+									<tr>
+										<td>Currently at</td>
+										<td>5th Ave at Bigelow Blvd (Pitt) (2 stops away)</td>
+									</tr>
+									<tr>
+										<td>Estimated Arrival&nbsp;&nbsp;&nbsp;</td>
+										<td id="71Atime"></td>
+									</tr>
+									<tr>
+										<td>Wait Time</td>
+										<td>6 min</td>
+									</tr>
+								</table> <a href="#portfolio" class="button button-big">Subscribe</a>
 						</article>
 						<article class="box box-style2">
 							<h3 align="center">71A</h3>
@@ -561,14 +597,14 @@
 								</tr>
 								<tr>
 									<td>Estimated Arrival&nbsp;&nbsp;&nbsp;</td>
-									<td>12:07 pm</td>
+									<td id = "71Atime1">pm</td>
 								</tr>
 								<tr>
 									<td>Wait Time</td>
 									<td>3 min</td>
 								</tr>
-							</table></b>
-							<a href="#portfolio" class="button button-big">Subscribe</a>
+							</table>
+							</b> <a href="#portfolio" class="button button-big">Subscribe</a>
 						</article>
 					</div>
 				</div>
