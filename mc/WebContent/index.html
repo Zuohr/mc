@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE HTML>
 <!--
 	Miniport 2.5 by HTML5 UP
@@ -33,70 +34,59 @@
 	src="http://maps.google.com/maps/api/js?sensor=true">
 	
 </script>
-<script>
-	var db = window.openDatabase("scores", "", "Previous Scores", 1024 * 1000);
-	function insertalerts(route, time, alertby, phone) {
-		db
-				.transaction(function(tx) {
-					tx
-							.executeSql(
-									'INSERT INTO Alerts (route_id, time, alert_by, phone) VALUES (?, ?, ?, ?)',
-									[ route, time, alertby, phone ]);
-				});
-	}
+ <script>
+      var db = window.openDatabase("scores", "", "Previous Scores", 1024*1000);
+function insertalerts(route, time, alertby, phone) {
+       db.transaction(function(tx) {
+          tx.executeSql('INSERT INTO Alerts (route_id, time, alert_by, phone) VALUES (?, ?, ?, ?)', [route, time, alertby, phone]);
+       });
+      }
+	   
+      function renderResults(tx, rs) {
+        e = $('#previous_scores');
+        e.html("");
+        for(var i=0; i < rs.rows.length; i++) {
+          r = rs.rows.item(i);
+          e.html(e.html() + ' Route: ' + r['route_id'] + ', Time: ' + r['time'] + ', Alert_Before: ' + r['alert_by'] + ', phone_number: ' + r['phone'] + '<br />');
+        }
+      }
 
-	function renderResults(tx, rs) {
-		e = $('#previous_scores');
-		e.html("");
-		for (var i = 0; i < rs.rows.length; i++) {
-			r = rs.rows.item(i);
-			e.html(e.html() + ' Route: ' + r['route_id'] + ', Time: '
-					+ r['time'] + ', Alert_Before: ' + r['alert_by']
-					+ ', phone_number: ' + r['phone'] + '<br />');
-		}
-	}
-
-	function renderScores(email) {
-		db.transaction(function(tx) {
-			if (!(email === undefined)) {
-				tx.executeSql('SELECT * FROM Alerts WHERE route_id = ?',
-						[ email ], renderResults);
-			} else {
-				tx.executeSql('SELECT * FROM Alerts', [], renderResults);
-			}
+      function renderScores(email) {
+        db.transaction(function(tx) {
+          if (!(email === undefined)) {
+            tx.executeSql('SELECT * FROM Alerts WHERE route_id = ?', [email], renderResults);
+          } else {
+            tx.executeSql('SELECT * FROM Alerts', [], renderResults);
+          }
+        });
+      }
+      $("#button2").click(function(){
+		    $("#home").hide();
+		    $("#result").show();
 		});
-	}
+      $(document).ready(function() {
+        db.transaction(function(tx) {
+          tx.executeSql('CREATE TABLE IF NOT EXISTS Alerts(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT, alert_by TEXT, phone TEXT)', []);
+        });
+        
+        $('#score_form').submit(function() {
+         	insertalerts( $('#hole1').val(),  $('#time').val(),  $('#hole2').val(),  $('#email').val());
+         	 $.get("sms.jsp?num="+$('#email').val(),function(data,status){
+         	     // alert("Data: " + data + "\nStatus: " + status);
+         	    });
+          renderScores();
+          return false;
+        });
 
-	$(document)
-			.ready(
-					function() {
-						db
-								.transaction(function(tx) {
-									tx
-											.executeSql(
-													'CREATE TABLE IF NOT EXISTS Alerts(id INTEGER PRIMARY KEY, route_id TEXT, time TEXT, alert_by TEXT, phone TEXT)',
-													[]);
-								});
+        $('#filter_previous_scores_form').submit(function() {
+          e = $('#filter_by_email').val();
+          renderScores(e);
+          return false;
+        });
 
-						$('#score_form').submit(
-								function() {
-									insertalerts($('#hole1').val(), $('#time')
-											.val(), $('#hole2').val(), $(
-											'#email').val());
-
-									renderScores();
-									return false;
-								});
-
-						$('#filter_previous_scores_form').submit(function() {
-							e = $('#filter_by_email').val();
-							renderScores(e);
-							return false;
-						});
-
-						renderScores();
-					});
-</script>
+        renderScores();
+      });
+    </script>
 <script>
 	var isHome = true;
 	var directionsDisplay;
@@ -106,8 +96,9 @@
 	var marker = null;
 
 	function initialize() {
-		/* alert("I understand location data is being collected by this application and agree to PAAC Privacy Policy! "); */
-
+		    alert("I understand location data is being collected by this application and agree to PAAC Privacy Policy! ");
+		
+		
 		directionsDisplay = new google.maps.DirectionsRenderer();
 		var mapOptions = {
 			zoom : 15,
@@ -246,6 +237,7 @@
 	}
 
 	function changeDisplay() {
+		
 		var homeBlock = document.getElementById("home");
 		var resultBlock = document.getElementById("result");
 		if (homeBlock.style.display == "block") {
@@ -377,12 +369,11 @@
 								</div>
 								<div class="row">
 									<div class="12u">
-										<input type="button" value="Search" id="home" class="button"
-											onclick="changeDisplay()" />
-										<!-- <a href="#" class="button form-button-submit" onclick = "changeDisplay();">Search</a> -->
-										<!--<a
-											href="#" class="button button-alt form-button-reset">Clear
-											Form</a>-->
+										<!--  <input type="button" value="Search" id="home" class="button"
+											onclick="changeDisplay()" />-->
+										<a class="button button-big" id="button2" onclick = "changeDisplay();">Search</a> 
+										<a href="#" class="button button-alt form-button-reset">Clear
+											Form</a>
 									</div>
 								</div>
 								<span>
@@ -441,7 +432,7 @@
 									<td>6 min</td>
 								</tr>
 							</table>
-							<button class="button">Subscribe</button>
+						<a href="#portfolio" class="button button-big">Subscribe</a>
 							<hr>
 							<p align="center">
 								<b>71A (in 9 min)</b>
@@ -468,7 +459,7 @@
 									<td>6 min</td>
 								</tr>
 							</table>
-							<button class="button">Subscribe</button>
+						<a href="#portfolio" class="button button-big">Subscribe</a>
 						</article>
 						<article class="box box-style2">
 							<h3 align="center">71A</h3>
@@ -497,7 +488,7 @@
 									<td>3 min</td>
 								</tr>
 							</table>
-							<button class="button">Subscribe</button>
+						<a href="#portfolio" class="button button-big">Subscribe</a>
 						</article>
 					</div>
 				</div>
@@ -548,7 +539,7 @@
 				</div>
 			</div>
 			<footer>
-				<a href="#top" class="button button-big">Back to Top</a>
+										<a href="#top" class="button button-big">Back to Top</a>
 			</footer>
 		</article>
 	</div>
@@ -622,32 +613,27 @@
 						</h3>
 						<div id="previous_scores"></div>
 
+    </div>
+							
 
 						<!-- 		</article> -->
 					</div>
-
-				</div>
-
-			</div>
-			<footer>
-				<a href="#top" class="button button-big">Back to Top</a>
-			</footer>
-			<div class="row">
-				<div class="12u">
-					<hr />
-					<h3>Find Us on ...</h3>
-					<ul class="social">
-						<li class="twitter"><a href="http://twitter.com/n33co"
-							class="fa fa-twitter"><span>Twitter</span></a></li>
-						<li class="facebook"><a href="#" class="fa fa-facebook"><span>Facebook</span></a></li>
-						<li class="dribbble"><a href="http://dribbble.com/n33"
-							class="fa fa-dribbble"><span>Dribbble</span></a></li>
-						<li class="linkedin"><a href="#" class="fa fa-linkedin"><span>LinkedIn</span></a></li>
-						<li class="tumblr"><a href="#" class="fa fa-tumblr"><span>Tumblr</span></a></li>
-						<li class="googleplus"><a href="#" class="fa fa-google-plus"><span>Google+</span></a></li>
-						<li class="github"><a href="http://github.com/n33"
-							class="fa fa-github"><span>Github</span></a></li>
-						<!--
+					<footer>
+						<a href="#top" class="button button-big">Back to Top</a>
+					</footer>
+					<div class="row">
+							<div class="12u">
+								<hr />
+								<h3>Find Us on ...</h3>
+								<ul class="social">
+									<li class="twitter"><a href="http://twitter.com/n33co" class="fa fa-twitter"><span>Twitter</span></a></li>
+									<li class="facebook"><a href="#" class="fa fa-facebook"><span>Facebook</span></a></li>
+									<li class="dribbble"><a href="http://dribbble.com/n33" class="fa fa-dribbble"><span>Dribbble</span></a></li>
+									<li class="linkedin"><a href="#" class="fa fa-linkedin"><span>LinkedIn</span></a></li>
+									<li class="tumblr"><a href="#" class="fa fa-tumblr"><span>Tumblr</span></a></li>
+									<li class="googleplus"><a href="#" class="fa fa-google-plus"><span>Google+</span></a></li>
+									<li class="github"><a href="http://github.com/n33" class="fa fa-github"><span>Github</span></a></li>
+									<!--
 									<li class="rss"><a href="#" class="fa fa-rss"><span>RSS</span></a></li>
 									<li class="instagram"><a href="#" class="fa fa-instagram"><span>Instagram</span></a></li>
 									<li class="foursquare"><a href="#" class="fa fa-foursquare"><span>Foursquare</span></a></li>
@@ -658,18 +644,18 @@
 									<li class="flickr"><a href="#" class="fa fa-flickr"><span>Flickr</span></a></li>
 									<li class="vimeo"><a href="#" class="fa fa-vimeo"><span>Vimeo</span></a></li>
 									-->
-					</ul>
-					<hr />
-				</div>
+								</ul>
+								<hr />
+							</div>
+						</div>
+					<footer>
+						<ul id="copyright">
+							<li>&copy; 2013 PAAC</li>
+							<li>Images: <a href="http://fotogrph.com">fotogrph</a></li>
+							<li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
+						</ul>
+					</footer>
+				</article>
 			</div>
-			<footer>
-				<ul id="copyright">
-					<li>&copy; 2013 PAAC</li>
-					<li>Images: <a href="http://fotogrph.com">fotogrph</a></li>
-					<li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
-				</ul>
-			</footer>
-		</article>
-	</div>
 </body>
 </html>
